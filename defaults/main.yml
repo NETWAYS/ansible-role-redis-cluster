@@ -1,0 +1,4 @@
+---
+# defaults file for redis_cluster
+
+redis_version: 6
