@@ -2,3 +2,7 @@
 
 - name: Include install task
   include_tasks: install.yml
+
+- name: Configure redis
+  import_tasks: configure.yml
+  #delegate_to: "{{  }}"

@@ -1,5 +1,33 @@
 ---
 
+- name: Set up overcommit
+  sysctl:
+    name: vm.overcommit_memory
+    value: "{{ kernel_virtual_memory }}"
+    state: present
+    reload: yes
+  when: kernel_virtual_memory is defined
+
+- name: Get transparent hugepages value
+  shell: cat /sys/kernel/mm/transparent_hugepage/enabled
+  register: transparent_hugepages_result
+  changed_when: false
+
+- name: Disable/enable transparent hugepages for current session
+  shell: "echo {{ transparent_hugepages_value }} > /sys/kernel/mm/transparent_hugepage/enabled"
+  when: "'[{{ transparent_hugepages_value }}]' not in transparent_hugepages_result.stdout"
+
+- name: Disable/enable transparent hugepages after reboot
+  blockinfile:
+    path: /etc/rc.local
+    mode: 0777
+    owner: root
+    group: root
+    block: |
+      if test -f /sys/kernel/mm/transparent_hugepage/enabled; then
+        echo {{ transparent_hugepages_value }} > /sys/kernel/mm/transparent_hugepage/enabled
+      fi
+
 - name: Enable redis module
   command: "dnf -y module enable redis:{{ redis_version }}"
   changed_when: false
