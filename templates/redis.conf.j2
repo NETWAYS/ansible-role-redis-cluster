@@ -1,0 +1,35 @@
+bind {{ item.redis_bind_addresses }}
+
+port {{ item.redis_port }}
+
+appendonly {{ item.redis_appendonly }}
+
+protected-mode {{ item.redis_protected_mode }}
+
+cluster-enabled {{ item.redis_cluster_enabled }}
+cluster-node-timeout {{ item.redis_cluster_node_timeout }}
+cluster-config-file {{ item.redis_cluster_config_file }}
+
+pidfile {{ item.redis_pidfile }}
+
+logfile {{ item.redis_logfile }} 
+
+loglevel {{ item.redis_loglevel }}
+requirepass {{ redis_requirepass }}
+masterauth {{ redis_masterauth }}
+daemonize {{ item.redis_daemonize }}
+databases {{ item.redis_databases }}
+
+{% for save in item.redis_save %}
+save {{ save }}
+{% endfor %}
+
+rdbcompression {{ item.redis_rdbcompression }}
+dbfilename {{ item.redis_dbfilename }}
+dir {{ item.redis_dbdir }}
+
+{% if redis_maxmemory is defined %}
+maxmemory {{ redis_maxmemory }}
+maxmemory-policy {{ redis_maxmemory_policy }}
+maxmemory-samples {{ redis_maxmemory_samples }}
+{% endif %}

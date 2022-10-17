@@ -1,0 +1,24 @@
+---
+
+- name: set fact
+  set_fact:
+    redis_cluster_command: >-
+      {%- set redis_instances = [] -%}
+      {%- for host in groups[redis_group_name] -%}
+        {%- for i in redis_configurations -%}
+          {%- set host_ip= hostvars[host]['ansible_default_ipv4']['address'] | default(ansible_all_ipv4_addresses[0]) -%}
+          {%- set host_port= i['redis_port'] -%}
+          {{ redis_instances.append( host_ip+":"+host_port ) }}
+        {%- endfor -%}
+      {%- endfor -%}
+      redis-cli --cluster create {{ redis_instances | join(' ') }} --cluster-replicas {{ redis_masters_replicas }} -a {{ redis_requirepass }} --cluster-yes 
+
+- name: Get cluster info
+  command: "redis-cli -h {{ansible_default_ipv4.address|default(ansible_all_ipv4_addresses[0])}} -p {{ redis_configurations [0]['redis_port'] }} -a {{ redis_requirepass }} CLUSTER INFO"
+  register: cluster_info
+  changed_when: false
+  failed_when: false 
+
+- name: Creat a cluster
+  command: "{{ redis_cluster_command }}"
+  when: 'cluster_info.rc == 0 and "cluster_known_nodes:1" in cluster_info.stdout'

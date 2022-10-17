@@ -4,5 +4,13 @@
   include_tasks: install.yml
 
 - name: Configure redis
-  import_tasks: configure.yml
-  #delegate_to: "{{  }}"
+  include_tasks: configure.yml
+  loop: "{{ redis_configurations | default([]) }}" 
+
+- name: Build a cluster
+  import_tasks: cluster.yml
+  delegate_to: "{{ ansible_play_hosts_all[0] }}"
+
+- debug:
+    var: ansible_play_hosts_all [0]
+

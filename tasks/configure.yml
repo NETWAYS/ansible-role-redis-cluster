@@ -1,2 +1,45 @@
 ---
 
+- name: "Set redis service for {{ item.redis_instance_name }}"
+  template:
+    src: redis.service.j2
+    dest: "{{ redis_systemd_directory }}/{{ item.redis_instance_name }}_{{ item.redis_node_role }}.service"
+    mode: '0644'
+    owner: root
+    group: root
+  when: "ansible_service_mgr == 'systemd'"
+  notify:
+    - Daemon reload
+
+- name: Flush handlers
+  meta: flush_handlers
+
+- name: "Create redis config directory for {{ item.redis_instance_name }}"
+  file:
+    path: "{{ redis_config_directory }}/{{ item.redis_node_role }}"
+    state: directory
+    mode: '0777'
+    owner: "{{ item.redis_user }}"
+    group: "{{ item.redis_group }}"
+
+- name: "Set service name {{ item.redis_instance_name }}"
+  set_fact:
+    service_name: "{{ item.redis_instance_name }}_{{ item.redis_node_role }}.service"
+
+- name: "Set redis config for {{ item.redis_instance_name }}"
+  template:
+    src: redis.conf.j2
+    dest: "{{ redis_config_directory }}/{{ item.redis_node_role }}/redis.conf"
+    owner: "{{ item.redis_user }}"
+    group: "{{ item.redis_group }}"
+    mode: '0660'
+  notify: Restart redis
+
+- name: "Start redis service {{ item.redis_instance_name }}"
+  systemd:
+    state: started
+    name: "{{ service_name }}"
+    enabled: yes
+
+- name: Flush handlers
+  meta: flush_handlers

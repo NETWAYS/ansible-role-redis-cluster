@@ -1,0 +1,13 @@
+[Unit]
+ Description=Redis key-value database
+ After=network.target
+ [Service]
+ ExecStart=/usr/bin/redis-server /etc/redis/{{ item.redis_node_role }}/redis.conf --daemonize no --supervised systemd 
+ Type=notify
+ User={{ item.redis_user }}
+ Group={{ item.redis_group }}
+ RuntimeDirectory=redis
+ RuntimeDirectoryMode=0755
+ LimitNOFILE=65535
+ [Install]
+ WantedBy=multi-user.target
