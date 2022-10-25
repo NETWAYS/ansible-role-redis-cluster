@@ -3,14 +3,65 @@
 - name: Include install task
   include_tasks: install.yml
 
-- name: Configure redis
+- name: Remove the standard redis config file
+  file:
+   dest: /etc/redis.conf
+   state: absent
+
+- name: Remove the standard redis service file
+  file:
+    dest: /usr/lib/systemd/system/redis.service
+    state: absent
+
+- name: Assemble redis ports
+  set_fact:
+    redis_ports: >-
+      {%- set redis_ports = [] -%}
+      {%- for i in redis_configurations -%}
+        {%- if i['redis_tls_port'] -%}
+          {%- set redis_port = i['redis_tls_port'] -%}
+        {%- else -%}
+          {%- set redis_port = i['redis_port'] -%}
+        {%- endif -%}
+        {{ redis_ports.append(redis_port) }}
+        {%- if redis_installation_scenario == 'cluster' -%}
+          {{ redis_ports.append(redis_port |int + 10000) }}
+        {%- endif -%}
+      {%- endfor -%}
+      {{ redis_ports | join(',') }}
+
+- name: Allow redis to listen on custom ports
+  seport:
+    ports: "{{ redis_ports }}"
+    proto: tcp
+    setype: redis_port_t
+    state: present
+  when: ansible_selinux.status == 'enabled'
+
+- name: Allow redis to write into cluster file
+  sefcontext:
+    target: "{{ item.redis_cluster_config_file }}"
+    setype: cluster_conf_t
+    state: present
+  when: ansible_selinux.status == 'enabled'
+  loop: "{{ redis_configurations | default([]) }}"
+  loop_control:
+    label: "{{ item.redis_cluster_config_file }}"
+  
+- name: Enable cluster mode for daemons
+  seboolean:
+    name: daemons_enable_cluster_mode
+    state: yes
+    persistent: yes
+  when:
+    - ansible_selinux.status == 'enabled'
+    - redis_installation_scenario == 'cluster'
+
+- name: Configure redis instances
   include_tasks: configure.yml
-  loop: "{{ redis_configurations | default([]) }}" 
+  loop: "{{ redis_configurations | default([]) }}"
 
 - name: Build a cluster
   import_tasks: cluster.yml
   delegate_to: "{{ ansible_play_hosts_all[0] }}"
-
-- debug:
-    var: ansible_play_hosts_all [0]
-
+  when: redis_installation_scenario == 'cluster'

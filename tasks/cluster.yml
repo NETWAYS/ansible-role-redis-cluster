@@ -1,24 +1,37 @@
 ---
 
-- name: set fact
+- name: Set redis cluster command
   set_fact:
     redis_cluster_command: >-
       {%- set redis_instances = [] -%}
       {%- for host in groups[redis_group_name] -%}
         {%- for i in redis_configurations -%}
-          {%- set host_ip= hostvars[host]['ansible_default_ipv4']['address'] | default(ansible_all_ipv4_addresses[0]) -%}
-          {%- set host_port= i['redis_port'] -%}
-          {{ redis_instances.append( host_ip+":"+host_port ) }}
+          {%- set host_ip = hostvars[host]['ansible_default_ipv4']['address'] | default(ansible_all_ipv4_addresses[0]) -%}
+          {%- if i['redis_tls_cluster'] -%}
+            {%- set host_port = i['redis_tls_port'] -%}
+          {%- else -%}
+            {%- set host_port = i['redis_port'] -%}
+          {%- endif -%}
+          {{ redis_instances.append( host_ip+ ':' +host_port ) }}
         {%- endfor -%}
       {%- endfor -%}
-      redis-cli --cluster create {{ redis_instances | join(' ') }} --cluster-replicas {{ redis_masters_replicas }} -a {{ redis_requirepass }} --cluster-yes 
+      "redis-cli --cluster create {{ redis_instances | join(' ') }} --cluster-replicas {{ redis_masters_replicas }} -a {{ redis_requirepass }} --cluster-yes {% if redis_configurations[0]['redis_tls_cluster'] %} --tls --cert {{ redis_configurations [0]['redis_tls_cert_file'] }} --key {{ redis_configurations [0]['redis_tls_key_file'] }} --cacert {{ redis_configurations [0]['redis_tls_ca_cert_file'] }} {% endif %}"
 
-- name: Get cluster info
-  command: "redis-cli -h {{ansible_default_ipv4.address|default(ansible_all_ipv4_addresses[0])}} -p {{ redis_configurations [0]['redis_port'] }} -a {{ redis_requirepass }} CLUSTER INFO"
+- name: Get redis cluster info
+  command: "redis-cli -h {{ansible_default_ipv4.address|default(ansible_all_ipv4_addresses[0])}} -p {% if redis_configurations [0]['redis_tls_cluster'] %} {{ redis_configurations [0]['redis_tls_port'] }} {% else %} {{ redis_configurations [0]['redis_port'] }} {% endif %} {% if redis_configurations[0]['redis_tls_cluster'] %} --tls --cert {{ redis_configurations [0]['redis_tls_cert_file'] }} --key {{ redis_configurations [0]['redis_tls_key_file'] }} --cacert {{ redis_configurations [0]['redis_tls_ca_cert_file'] }} {% endif %} -a {{ redis_requirepass }} CLUSTER INFO"
   register: cluster_info
   changed_when: false
-  failed_when: false 
+  failed_when: false
 
-- name: Creat a cluster
+- debug:
+    var: cluster_info
+
+- name: Creat a redis cluster
   command: "{{ redis_cluster_command }}"
   when: 'cluster_info.rc == 0 and "cluster_known_nodes:1" in cluster_info.stdout'
+  register: cluster_creation_result
+
+- name: Print the redis cluster creation results
+  debug:
+    var: cluster_creation_result.stdout_lines
+  when: cluster_creation_result.changed

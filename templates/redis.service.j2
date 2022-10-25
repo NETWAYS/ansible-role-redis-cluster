@@ -2,10 +2,10 @@
  Description=Redis key-value database
  After=network.target
  [Service]
- ExecStart=/usr/bin/redis-server /etc/redis/{{ item.redis_node_role }}/redis.conf --daemonize no --supervised systemd 
+ ExecStart=/usr/bin/redis-server {{ redis_config_directory }}/{{ item.redis_instance_name }}.conf --daemonize no --supervised systemd 
  Type=notify
- User={{ item.redis_user }}
- Group={{ item.redis_group }}
+ User={{ redis_user_name }}
+ Group={{ redis_group_name }}
  RuntimeDirectory=redis
  RuntimeDirectoryMode=0755
  LimitNOFILE=65535

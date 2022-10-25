@@ -1,30 +1,29 @@
 ---
-# defaults file for redis_cluster
+# defaults file for redis
 
+manage_dnf_module: true
 redis_version: '6'
-kernel_virtual_memory: '1'
-transparent_hugepages_value: 'never'
+#kernel_virtual_memory: '1'
+#transparent_hugepages_value: 'madvise'
 redis_systemd_directory: '/usr/lib/systemd/system'
 redis_config_directory: '/etc/redis'
 redis_group_name: 'redis'
+redis_user_name: 'redis'
 redis_masters_replicas: '1'
 redis_requirepass: 'changeme'
 redis_masterauth: 'changeme'
+redis_installation_scenario: 'cluster'
 
 redis_configurations:
-  - redis_instance_name: redis01
-    #target_host: redis04
-    redis_node_role: 'master'
-    redis_user: 'redis'
-    redis_group: 'redis'
+  - redis_instance_name: 'redis01'
     redis_bind_addresses: '0.0.0.0'
-    redis_port: '7000'
-    redis_appendonly: 'no'
-    redis_protected_mode: 'no'
-    redis_pidfile: '/var/run/redis/redis_master01.pid'
-    redis_logfile: '/var/log/redis/redis_master01.log'
+    redis_port: '0'
+    redis_appendonly: 'yes'
+    redis_protected_mode: 'yes'
+    redis_pidfile: '/var/run/redis/redis01.pid'
+    redis_logfile: '/var/log/redis/redis01.log'
     redis_loglevel: 'notice'
-    redis_cluster_config_file: '/etc/redis/master/redis01_cluster.conf'
+    redis_cluster_config_file: '/etc/redis/redis01_cluster.conf'
     redis_cluster_enabled: 'yes'
     redis_cluster_node_timeout: '5000'
     redis_daemonize: 'yes'
@@ -36,22 +35,27 @@ redis_configurations:
     redis_rdbcompression: 'yes'
     redis_dbfilename: 'dump.rdb'
     redis_dbdir: '/var/lib/redis'
-    
-    
+    redis_tls_port: '7010'
+    redis_tls_cert_file: '/etc/redis/redis_certificates/{{ ansible_fqdn }}.crt'
+    redis_tls_key_file: '/etc/redis/redis_certificates/{{ ansible_fqdn }}.key'
+    redis_tls_ca_cert_file: '/etc/redis/redis_certificates/ca.crt'
+    redis_tls_auth_clients: 'no'
+    redis_tls_cluster: 'yes'
+    redis_tls_replication: 'yes'
+    redis_extra_config:
+      - repl-diskless-sync no
+      - repl-diskless-sync-delay 5
+      - repl-diskless-load disabled
 
-  - redis_instance_name: redis02
-    #target_host: redis04
-    redis_node_role: 'replica'
-    redis_user: 'redis'
-    redis_group: 'redis'
+  - redis_instance_name: 'redis02'
     redis_bind_addresses: '0.0.0.0'
-    redis_port: '7001'
-    redis_appendonly: 'no'
-    redis_protected_mode: 'no'
-    redis_pidfile: '/var/run/redis/redis_replica01.pid'
-    redis_logfile: '/var/log/redis/redis_replica01.log'
+    redis_port: '0'
+    redis_appendonly: 'yes'
+    redis_protected_mode: 'yes'
+    redis_pidfile: '/var/run/redis/redis02.pid'
+    redis_logfile: '/var/log/redis/redis02.log'
     redis_loglevel: 'notice'
-    redis_cluster_config_file: '/etc/redis/replica/redis02_cluster.conf'
+    redis_cluster_config_file: '/etc/redis/redis02_cluster.conf'
     redis_cluster_enabled: 'yes'
     redis_cluster_node_timeout: '5000'
     redis_daemonize: 'yes'
@@ -63,3 +67,10 @@ redis_configurations:
     redis_rdbcompression: 'yes'
     redis_dbfilename: 'dump.rdb'
     redis_dbdir: '/var/lib/redis'
+    redis_tls_port: '7011'
+    redis_tls_cert_file: '/etc/redis/redis_certificates/{{ ansible_fqdn }}.crt'
+    redis_tls_key_file: '/etc/redis/redis_certificates/{{ ansible_fqdn }}.key'
+    redis_tls_ca_cert_file: '/etc/redis/redis_certificates/ca.crt' 
+    redis_tls_auth_clients: 'no'
+    redis_tls_cluster: 'yes'
+    redis_tls_replication: 'yes'
