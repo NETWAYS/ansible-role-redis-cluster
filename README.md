@@ -27,4 +27,46 @@ The current version is tested on rocky 8.
 * `redis_masterauth`: If you use a cluster, set the same requirepass as avalue here to let the replica authenticate to the master (default: `changeme`)
 * `redis_configurations`: A list of redis configurations to one or many redis instances. It includs the following parameters:
   * `redis_instance_name`: Redis instance name. It should be uniq. The service and the redis config file will have the accordingly named.
-  * `redis_bind_addresses`: Interface on which Redis will listen (default: `0.0.0.0`)
+  * `redis_bind_addresses`: Interface on which redis will listen (default: `0.0.0.0`)
+  * `redis_port`: Port an which redis will listen. Set it to 0 if you will use TLS (default: `0`)
+  * `redis_appendonly`: Enable or disable beeter date durability (default: `no`)
+  * `redis_protected_mode`: Disable it to let clients connect to your instance without authentication (default: `yes`)
+  * `redis_pidfile`: Path to pidfile (default: `/var/run/redis/{{ redis_instance_name }}.pid`)
+  * `redis_logfile`: Path to logfile (default: `/var/log/redis/{{ redis_instance_name }}.log`)
+  * `redis_loglevel`: Log level (default: `notice`)
+  * `redis_cluster_config_file`: Path to cluster file (default: `/etc/redis/{{ redis_instance_name }}_cluster.conf`)
+  * `redis_cluster_enabled`: Run in cluster mode? (default: `yes`). It will be set only if `redis_installation_scenario` set to `cluster`
+  * `redis_cluster_node_timeout`: Is an amount of milliseconds a node must be unreachable for it to be considered in failure state. After this time a replica will be elected as amaster (default: `5000`)
+  * `redis_daemonize`: Run redis as adaemon and write a pid file (default: `yes`)
+  * `redis_databases`: Set the number of databases (default: `16`)
+  * `redis_save`: Redis Will save the DB if both the given number of seconds and the given number of write operations against the DB occurred. In the example below the behavior will be to save after 900 sec (15 min) if at least 1 key changed, etcetera. The default is:
+    ```yaml redis_save:
+	      - '900 1'
+              - '300 10'
+              - '60 10000'
+    ```
+  * `redis_rdbcompression`: Compress string objects using LZF when dump .rdb databases? (default: `yes`)
+  * `redis_dbfilename`: The filename where to dump the DB (default: `{{ redis_instance_name }}_dump.rdb`)
+  * `redis_dbdir`: The path of DB (default: `/var/lib/redis`)
+  * `redis_tls_port`: TLS-listening port, `redis_port` should be set to `0`
+  * `redis_tls_cert_file`: Path to certificate file (default: `/etc/redis/redis_certificates/{{ ansible_fqdn }}.crt`)
+  * `redis_tls_key_file`: Path to key file (default: `/etc/redis/redis_certificates/{{ ansible_fqdn }}.key`)
+  * `redis_tls_ca_cert_file`: Path to CA file (default: `/etc/redis/redis_certificates/ca.crt`)
+  * `redis_tls_auth_clients`: If "no" is specified, client certificates are not required and not accepted. If "optional" is specified, client certificates are accepted and must be valid if provided, but are not required. (default: `no`)
+  * `redis_tls_cluster`: If to enable TLS for the cluster bus protocol (default: `yes`)
+  * `redis_tls_replication`: Let replica to establish a TLS connection with its master (default: `yes`)
+  * `redis_extra_config`: Set your configuration lines to the end of redis configuration file, for example:
+    ```yaml redis_extra_config:
+      - repl-diskless-sync no
+      - repl-diskless-sync-delay 5
+      - repl-diskless-load disabled
+    ```
+## Example Playbook ##
+
+```yaml
+---
+- hosts: redis
+  become: yes
+  roles:
+    - redis_cluster
+```
