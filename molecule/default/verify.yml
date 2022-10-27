@@ -12,4 +12,4 @@
         var: result
 
     - name: Verify redis status
-      command: "redis-cli -h {{ ansible_dns.nameservers }} -p {{ redis_configurations[0]['redis_port'] }} -a {{ redis_requirepass }} info stats"
+      command: "redis-cli -h {{ ansible_dns.nameservers }} -p 7010 -a changeme info stats"
