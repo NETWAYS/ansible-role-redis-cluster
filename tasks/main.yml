@@ -24,7 +24,7 @@
     redis_ports: >-
       {%- set redis_ports = [] -%}
       {%- for i in redis_configurations -%}
-        {%- if i['redis_tls_port'] -%}
+        {%- if i['redis_tls_port'] is defined -%}
           {%- set redis_port = i['redis_tls_port'] -%}
         {%- else -%}
           {%- set redis_port = i['redis_port'] -%}
@@ -51,11 +51,13 @@
     target: "{{ item.redis_cluster_config_file }}"
     setype: cluster_conf_t
     state: present
-  when: ansible_selinux.status == 'enabled'
+  when:
+    - ansible_selinux.status == 'enabled'
+    - redis_installation_scenario == 'cluster'
   tags: redis_configuration
   loop: "{{ redis_configurations | default([]) }}"
   loop_control:
-    label: "{{ item.redis_cluster_config_file }}"
+    label: "{{ item.redis_instance_name }}"
   
 - name: Enable cluster mode for daemons
   seboolean:
