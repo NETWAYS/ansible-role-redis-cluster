@@ -1,7 +1,7 @@
 ---
 
 - name: Include install task
-  include_tasks: 
+  include_tasks:
     file: install.yml
     apply:
       tags: redis_install
@@ -58,7 +58,7 @@
   loop: "{{ redis_configurations | default([]) }}"
   loop_control:
     label: "{{ item.redis_instance_name }}"
-  
+ 
 - name: Enable cluster mode for daemons
   seboolean:
     name: daemons_enable_cluster_mode
@@ -70,7 +70,7 @@
     - redis_installation_scenario == 'cluster'
 
 - name: Configure redis instances
-  include_tasks: 
+  include_tasks:
     file: configure.yml
     apply:
       tags: redis_configuration

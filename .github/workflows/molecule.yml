@@ -16,7 +16,7 @@ jobs:
       max-parallel: 4
       matrix:
         distro: [centos7, rockylinux8]
-        scenario: [standalone_without_tls]
+        scenario: [standalonewithouttls]
     steps:
       - name: Check out code
         uses: actions/checkout@v2

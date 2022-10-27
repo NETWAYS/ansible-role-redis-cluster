@@ -42,7 +42,7 @@
 - name: Enable redis module
   command: "dnf -y module enable redis:{{ redis_version }}"
   changed_when: false
-  when: 
+  when:
     - ansible_os_family == "RedHat"
     - ansible_distribution_major_version == "8"
     - manage_dnf_module
