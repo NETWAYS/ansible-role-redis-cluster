@@ -2,6 +2,12 @@
 - name: Prepare
   hosts: all
   tasks:
+    - name: command
+      command: yum repolist
+      register: command_result
+    - name: print repos
+      debug:
+        var: command_result
     - name: install python for SELinux
       package:
         name:

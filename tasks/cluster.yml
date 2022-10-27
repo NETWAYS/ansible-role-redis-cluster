@@ -19,14 +19,13 @@
   tags: redis_cluster
 
 - name: Get redis cluster info
-  command: "redis-cli -h {{ansible_default_ipv4.address|default(ansible_all_ipv4_addresses[0])}} -p {% if redis_configurations [0]['redis_tls_cluster'] %} {{ redis_configurations [0]['redis_tls_port'] }} {% else %} {{ redis_configurations [0]['redis_port'] }} {% endif %} {% if redis_configurations[0]['redis_tls_cluster'] %} --tls --cert {{ redis_configurations [0]['redis_tls_cert_file'] }} --key {{ redis_configurations [0]['redis_tls_key_file'] }} --cacert {{ redis_configurations [0]['redis_tls_ca_cert_file'] }} {% endif %} -a {{ redis_requirepass }} CLUSTER INFO"
+  command: "redis-cli -h {{ ansible_default_ipv4.address|default(ansible_all_ipv4_addresses[0]) }} -p {% if redis_configurations [0]['redis_tls_cluster'] %} {{ redis_configurations [0]['redis_tls_port'] }} {% else %} {{ redis_configurations [0]['redis_port'] }} {% endif %} {% if redis_configurations[0]['redis_tls_cluster'] %} --tls --cert {{ redis_configurations [0]['redis_tls_cert_file'] }} --key {{ redis_configurations [0]['redis_tls_key_file'] }} --cacert {{ redis_configurations [0]['redis_tls_ca_cert_file'] }} {% endif %} -a {{ redis_requirepass }} CLUSTER INFO"
   register: cluster_info
   changed_when: false
   failed_when: false
   tags: redis_cluster
 
-- name: Print redis cluster info
-  debug:
+- debug:
     var: cluster_info
   tags: redis_cluster
 
