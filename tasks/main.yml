@@ -1,17 +1,23 @@
 ---
 
 - name: Include install task
-  include_tasks: install.yml
+  include_tasks: 
+    file: install.yml
+    apply:
+      tags: redis_install
+  tags: redis_install
 
 - name: Remove the standard redis config file
   file:
-   dest: /etc/redis.conf
-   state: absent
+    dest: /etc/redis.conf
+    state: absent
+  tags: redis_configuration
 
 - name: Remove the standard redis service file
   file:
     dest: /usr/lib/systemd/system/redis.service
     state: absent
+  tags: redis_configuration
 
 - name: Assemble redis ports
   set_fact:
@@ -29,6 +35,7 @@
         {%- endif -%}
       {%- endfor -%}
       {{ redis_ports | join(',') }}
+  tags: redis_configuration
 
 - name: Allow redis to listen on custom ports
   seport:
@@ -37,6 +44,7 @@
     setype: redis_port_t
     state: present
   when: ansible_selinux.status == 'enabled'
+  tags: redis_configuration
 
 - name: Allow redis to write into cluster file
   sefcontext:
@@ -44,6 +52,7 @@
     setype: cluster_conf_t
     state: present
   when: ansible_selinux.status == 'enabled'
+  tags: redis_configuration
   loop: "{{ redis_configurations | default([]) }}"
   loop_control:
     label: "{{ item.redis_cluster_config_file }}"
@@ -53,15 +62,21 @@
     name: daemons_enable_cluster_mode
     state: yes
     persistent: yes
+  tags: redis_configuration
   when:
     - ansible_selinux.status == 'enabled'
     - redis_installation_scenario == 'cluster'
 
 - name: Configure redis instances
-  include_tasks: configure.yml
+  include_tasks: 
+    file: configure.yml
+    apply:
+      tags: redis_configuration
+  tags: redis_configuration
   loop: "{{ redis_configurations | default([]) }}"
 
 - name: Build a cluster
   import_tasks: cluster.yml
   delegate_to: "{{ ansible_play_hosts_all[0] }}"
+  tags: redis_cluster
   when: redis_installation_scenario == 'cluster'
