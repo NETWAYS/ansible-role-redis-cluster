@@ -11,5 +11,5 @@
       debug:
         var: result
 
-    - name: Verify redis status
-      command: "redis-cli -h {{ ansible_dns.nameservers }} -p {{ redis_configurations[0]['redis_port'] }} -a changeme info stats"
+    #- name: Verify redis status
+    #  command: "redis-cli -h {{ ansible_dns.nameservers }} -p {{ redis_configurations[0]['redis_port'] }} -a changeme info stats"
