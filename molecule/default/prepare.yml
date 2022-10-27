@@ -1,0 +1,9 @@
+---
+- name: Prepare
+  hosts: all
+  tasks:
+    - name: install python for SELinux
+      package:
+        name:
+          - policycoreutils-python-utils
+
