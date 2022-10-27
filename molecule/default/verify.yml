@@ -5,6 +5,11 @@
   tasks:
     - name: setup
       setup:
+      register: result
+
+    - name: Prit result
+      debug:
+        var: result
 
     - name: Verify redis status
       command: "redis-cli -h {{ansible_default_ipv4.address}} -p {{ redis_configurations [0]['redis_port'] }} -a {{ redis_requirepass }} info stats"
