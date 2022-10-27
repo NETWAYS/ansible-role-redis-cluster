@@ -1,0 +1,3 @@
+skip_list:
+  - yaml
+  - fqcn-builtins  # Use FQCN for builtin actions.
