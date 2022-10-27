@@ -58,7 +58,7 @@
   loop: "{{ redis_configurations | default([]) }}"
   loop_control:
     label: "{{ item.redis_instance_name }}"
- 
+
 - name: Enable cluster mode for daemons
   seboolean:
     name: daemons_enable_cluster_mode
