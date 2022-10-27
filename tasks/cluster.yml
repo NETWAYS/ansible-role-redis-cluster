@@ -25,7 +25,8 @@
   failed_when: false
   tags: redis_cluster
 
-- debug:
+- name: Print redis cluster info
+  debug:
     var: cluster_info
   tags: redis_cluster
 
