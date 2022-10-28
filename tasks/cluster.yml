@@ -1,4 +1,11 @@
 ---
+- name: Molecule debug ip adress
+  debug:
+    var: hostvars['redis01']['ansible_default_ipv4']['address']
+
+- name : molecule debug redis configuration
+  debug:
+    var: redis_configurations
 
 - name: Set redis cluster command
   set_fact:
