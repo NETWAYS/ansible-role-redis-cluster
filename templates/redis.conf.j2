@@ -28,8 +28,10 @@ tls-cert-file {{ item.redis_tls_cert_file }}
 tls-key-file {{ item.redis_tls_key_file }}
 tls-ca-cert-file {{ item.redis_tls_ca_cert_file }}
 tls-auth-clients {{ item.redis_tls_auth_clients }}
-  {% if item.redis_cluster_enabled is defined and item.redis_cluster_enabled == 'yes' %}
+  {% if item.redis_tls_cluster is defined %}
 tls-cluster {{ item.redis_tls_cluster }}
+  {% endif %}
+  {% if item.redis_tls_replication is defined %}
 tls-replication {{ item.redis_tls_replication }}
   {% endif %}
   {% if item.redis_tls_protocols is defined %}

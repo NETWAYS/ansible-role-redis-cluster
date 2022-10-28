@@ -32,8 +32,6 @@
        redis_cluster_config_file: '/etc/redis/redis01_cluster.conf'
        redis_cluster_enabled: 'yes'
        redis_cluster_node_timeout: '5000'
-       redis_tls_cluster: 'no'
-       redis_tls_replication: 'no'
   tasks:
     - name: "Include redis_cluster role"
       include_role:

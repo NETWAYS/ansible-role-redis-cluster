@@ -14,7 +14,7 @@
       {%- for host in ansible_play_hosts_all -%}
         {%- for i in redis_configurations -%}
           {%- set host_ip = hostvars[host]['ansible_default_ipv4']['address'] | default(ansible_all_ipv4_addresses[0]) -%}
-          {%- if i['redis_tls_cluster'] -%}
+          {%- if i['redis_tls_cluster' == 'yes'] -%}
             {%- set host_port = i['redis_tls_port'] -%}
           {%- else -%}
             {%- set host_port = i['redis_port'] -%}
