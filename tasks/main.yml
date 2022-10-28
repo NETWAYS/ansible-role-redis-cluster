@@ -80,5 +80,6 @@
 - name: Build a cluster
   import_tasks: cluster.yml
   delegate_to: "{{ ansible_play_hosts_all[0] }}"
+  run_once: true
   tags: redis_cluster
   when: redis_installation_scenario == 'cluster'
