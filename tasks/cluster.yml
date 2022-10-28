@@ -42,6 +42,11 @@
     var: cluster_info
   tags: redis_cluster
 
+- name: Print nodes info
+  debug:
+    var: ansible_play_hosts_all
+  tags: redis_cluster
+
 - name: Creat a redis cluster
   command: "{{ redis_cluster_command }}"
   when: 'cluster_info.rc == 0 and "cluster_known_nodes:1" in cluster_info.stdout'
