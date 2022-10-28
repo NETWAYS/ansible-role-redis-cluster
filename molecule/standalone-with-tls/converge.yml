@@ -6,7 +6,7 @@
 - name: Converge
   hosts: all
   vars:
-    ca_ca_host: 'redis01.shared'
+    ca_ca_host: 'redis01'
     ca_client_ca_dir: '/etc/redis/redis_certificates'
     ca_client_ca_dir_owner: 'redis'
     ca_client_ca_dir_group: 'redis'
