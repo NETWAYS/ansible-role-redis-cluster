@@ -5,6 +5,7 @@
 # https://github.com/ansible-community/molecule/issues/1567#issuecomment-436876722
 - name: Converge
   hosts: all
+  gather_facts: true
   vars:
    kernel_virtual_memory: 1
    transparent_hugepages_value: 'madvise'
