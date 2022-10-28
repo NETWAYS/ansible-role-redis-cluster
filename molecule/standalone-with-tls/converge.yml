@@ -47,7 +47,7 @@
     - name: "Include CA role"
       include_role:
         name: ca
-    
+ 
     - name: "Include redis-cluster role"
       include_role:
         name: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') | basename }}"
