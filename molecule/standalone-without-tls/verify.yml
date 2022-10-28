@@ -7,7 +7,7 @@
       - redis_port: '7010'
   tasks:
     - name: Get the ip address
-      command: "ip -a"
+      command: "ip a"
       register: ip_result
 
     - name: Print the ip adress
