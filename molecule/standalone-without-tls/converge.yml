@@ -8,24 +8,6 @@
   vars:
    kernel_virtual_memory: 1
    transparent_hugepages_value: 'madvise'
-  # redis_configurations:
-  #       - redis_instance_name: 'redis01'
-  #         redis_bind_addresses: '0.0.0.0'
-  #         redis_port: '7010'
-  #         redis_appendonly: 'yes'
-  #         redis_protected_mode: 'yes'
-  #         redis_pidfile: '/var/run/redis/redis01.pid'
-  #         redis_logfile: '/var/log/redis/redis01.log'
-  #         redis_loglevel: 'notice'
-  #         redis_daemonize: 'yes'
-  #         redis_databases: '16'
-  #         redis_save:
-  #           - '900 1'
-  #           - '300 10'
-  #           - '60 10000'
-  #         redis_rdbcompression: 'yes'
-  #         redis_dbfilename: 'redis01_dump.rdb'
-  #         redis_dbdir: '/var/lib/redis'
   tasks:
     - name: "Include redis_cluster role"
       include_role:
