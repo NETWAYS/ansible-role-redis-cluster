@@ -12,4 +12,5 @@
       package:
         name:
           - policycoreutils-python-utils
+          - iproute
 

@@ -14,7 +14,7 @@
       {%- for host in ansible_play_hosts_all -%}
         {%- for i in redis_configurations -%}
           {%- set host_ip = hostvars[host]['ansible_default_ipv4']['address'] | default(ansible_all_ipv4_addresses[0]) -%}
-          {%- if i['redis_tls_cluster' == 'yes'] -%}
+          {%- if i['redis_tls_cluster'] -%}
             {%- set host_port = i['redis_tls_port'] -%}
           {%- else -%}
             {%- set host_port = i['redis_port'] -%}
@@ -28,6 +28,7 @@
 - name: print redis command
   debug:
     var: redis_cluster_command
+  tags: redis_cluster
 
 - name: Get redis cluster info
   command: "redis-cli -h {{ ansible_default_ipv4.address|default(ansible_all_ipv4_addresses[0]) }} -p {% if redis_configurations [0]['redis_tls_cluster'] %} {{ redis_configurations [0]['redis_tls_port'] }} {% else %} {{ redis_configurations [0]['redis_port'] }} {% endif %} {% if redis_configurations[0]['redis_tls_cluster'] %} --tls --cert {{ redis_configurations [0]['redis_tls_cert_file'] }} --key {{ redis_configurations [0]['redis_tls_key_file'] }} --cacert {{ redis_configurations [0]['redis_tls_ca_cert_file'] }} {% endif %} -a {{ redis_requirepass }} CLUSTER INFO"
