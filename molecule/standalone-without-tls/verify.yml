@@ -2,6 +2,9 @@
 
 - name: Verify
   hosts: all
+  vars:
+    redis_configurations:
+      redis_port: '7010'
   tasks:
     - name: setup
       setup:
