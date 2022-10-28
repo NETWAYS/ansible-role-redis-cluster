@@ -16,7 +16,7 @@ jobs:
       max-parallel: 4
       matrix:
         distro: [rockylinux8]
-        scenario: [standalone-without-tls, standalone-with-tls, cluster-without-tls]
+        scenario: [standalone-without-tls, standalone-with-tls, cluster-without-tls, cluster-h-tls]
     steps:
       - name: Check out code
         uses: actions/checkout@v2
