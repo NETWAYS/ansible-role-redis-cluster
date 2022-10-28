@@ -1,26 +1,26 @@
----
-
-- name: Verify
-  hosts: all
-  vars:
-    redis_configurations:
-      - redis_port: '7010'
-  tasks:
-    - name: Get the ip address
-      command: "ip a"
-      register: ip_result
-
-    - name: Print the ip adress
-      debug:
-        var: ip_result
-
-    - name: setup
-      setup:
-      register: result
-
-    - name: Prit result
-      debug:
-        var: result
-
-    - name: Verify redis status
-      command: "redis-cli -h {{ ansible_dns.nameservers }} -p {{ redis_configurations[0]['redis_port'] }} -a changeme info stats"
+#---
+#
+#- name: Verify
+#  hosts: all
+#  vars:
+#    redis_configurations:
+#      - redis_port: '7010'
+#  tasks:
+#    - name: Get the ip address
+#      command: "ip a"
+#      register: ip_result
+#
+#    - name: Print the ip adress
+#      debug:
+#        var: ip_result
+#
+#    - name: setup
+#      setup:
+#      register: result
+#
+#    - name: Prit result
+#      debug:
+#        var: result
+#
+#    - name: Verify redis status
+#      command: "redis-cli -h {{ ansible_dns.nameservers }} -p {{ redis_configurations[0]['redis_port'] }} -a changeme info stats"
