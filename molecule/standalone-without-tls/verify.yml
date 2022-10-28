@@ -6,6 +6,14 @@
     redis_configurations:
       - redis_port: '7010'
   tasks:
+    - name: Get the ip address
+      command: "ip -a"
+      register: ip_result
+
+    - name: Print the ip adress
+      debug:
+        var: ip_result
+
     - name: setup
       setup:
       register: result
