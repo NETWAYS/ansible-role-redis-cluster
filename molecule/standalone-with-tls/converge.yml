@@ -37,7 +37,6 @@
         redis_tls_key_file: '/etc/redis/redis_certificates/{{ ansible_fqdn }}.key'
         redis_tls_ca_cert_file: '/etc/redis/redis_certificates/ca.crt'
         redis_tls_auth_clients: 'no'
-        redis_tls_replication: 'yes'
   tasks:
     - name: "Install redis to get redis user for CA role"
       include_role:
