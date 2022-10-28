@@ -13,7 +13,7 @@
     ca_client_ca_dir_mode: 0700
     kernel_virtual_memory: 1
     transparent_hugepages_value: 'madvise'
-    redis_installation_scenario: 'standalone'
+    redis_installation_scenario: 'cluster'
     redis_configurations:
       - redis_instance_name: 'redis01'
         redis_bind_addresses: '0.0.0.0'
@@ -42,7 +42,7 @@
         redis_tls_auth_clients: 'no'
         redis_tls_cluster: 'yes'
         redis_tls_replication: 'yes'
- 
+
       - redis_instance_name: 'redis02'
         redis_bind_addresses: '0.0.0.0'
         redis_port: '0'
