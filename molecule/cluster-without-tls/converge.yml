@@ -7,6 +7,7 @@
   hosts: all
   gather_facts: true
   vars:
+   ansible_all_ipv4_addresses: ansible_dns
    kernel_virtual_memory: 1
    transparent_hugepages_value: 'madvise'
    redis_installation_scenario: 'cluster'
