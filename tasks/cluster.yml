@@ -46,6 +46,7 @@
   command: "{{ redis_cluster_command }}"
   when: 'cluster_info.rc == 0 and "cluster_known_nodes:1" in cluster_info.stdout'
   register: cluster_creation_result
+  delegate_to: "{{ ansible_play_hosts_all[0] }}"
   tags: redis_cluster
 
 - name: Print the redis cluster creation results
