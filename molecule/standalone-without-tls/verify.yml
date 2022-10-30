@@ -6,24 +6,5 @@
     redis_configurations:
       - redis_port: '7010'
   tasks:
-    - name: Example assertion
-      assert:
-        that: true
-#    - name: Get the ip address
-#      command: "ip a"
-#      register: ip_result
-#
-#    - name: Print the ip adress
-#      debug:
-#        var: ip_result
-#
-#    - name: setup
-#      setup:
-#      register: result
-#
-#    - name: Prit result
-#      debug:
-#        var: result
-#
-#    - name: Verify redis status
-#      command: "redis-cli -h {{ ansible_dns.nameservers }} -p {{ redis_configurations[0]['redis_port'] }} -a changeme info stats"
+    - name: Verify redis status
+      command: "redis-cli -h {{ ansible_default_ipv4.address|default(ansible_all_ipv4_addresses[0]) }} -p {{ redis_configurations[0]['redis_port'] }} -a changeme info stats"
