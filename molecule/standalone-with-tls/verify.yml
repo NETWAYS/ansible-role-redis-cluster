@@ -2,6 +2,13 @@
 
 - name: Verify
   hosts: all
+  vars:
+    redis_requirepass: 'changeme'
+    redis_configurations:
+      redis_tls_port: '7010'
+      redis_tls_cert_file: '/etc/redis/redis_certificates/{{ ansible_fqdn }}.crt'
+      redis_tls_key_file: '/etc/redis/redis_certificates/{{ ansible_fqdn }}.key'
+      redis_tls_ca_cert_file: '/etc/redis/redis_certificates/ca.crt'
   tasks:
     - name: Verify redis status
       command: "redis-cli -h {{ ansible_default_ipv4.address|default(ansible_all_ipv4_addresses[0]) }} -p {{ redis_configurations [0]['redis_tls_port'] }} --tls --cert {{ redis_configurations [0]['redis_tls_cert_file'] }} --key {{ redis_configurations [0]['redis_tls_key_file'] }} --cacert {{ redis_configurations [0]['redis_tls_ca_cert_file'] }} -a {{ redis_requirepass }} info stats"
