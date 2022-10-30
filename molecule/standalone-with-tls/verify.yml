@@ -3,9 +3,5 @@
 - name: Verify
   hosts: all
   tasks:
-    - name: Example assertion
-      assert:
-        that: true
-#
-#    - name: Verify redis status
-#      command: "redis-cli -h {{ ansible_dns.nameservers }} -p {{ redis_configurations[0]['redis_port'] }} -a changeme info stats"
+    - name: Verify redis status
+      command: "redis-cli -h {{ ansible_default_ipv4.address|default(ansible_all_ipv4_addresses[0]) }} -p {{ redis_configurations [0]['redis_tls_port'] }} --tls --cert {{ redis_configurations [0]['redis_tls_cert_file'] }} --key {{ redis_configurations [0]['redis_tls_key_file'] }} --cacert {{ redis_configurations [0]['redis_tls_ca_cert_file'] }} {% endif %} -a {{ redis_requirepass }} info stats"

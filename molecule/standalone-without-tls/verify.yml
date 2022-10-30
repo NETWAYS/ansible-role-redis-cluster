@@ -2,9 +2,10 @@
 
 - name: Verify
   hosts: all
-  #vars:
-  #  redis_configurations:
-  #    - redis_port: '7010'
+  vars:
+    redis_requirepass: 'changeme' 
+    redis_configurations:
+      - redis_port: '7010'
   tasks:
     - name: Verify redis status
-      command: "redis-cli -h {{ ansible_default_ipv4.address|default(ansible_all_ipv4_addresses[0]) }} -p {{ redis_configurations[0]['redis_port'] }} -a changeme info stats"
+      command: "redis-cli -h {{ ansible_default_ipv4.address|default(ansible_all_ipv4_addresses[0]) }} -p {{ redis_configurations[0]['redis_port'] }} -a {{ redis_requirepass }} info stats"
