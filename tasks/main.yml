@@ -59,7 +59,7 @@
   loop_control:
     label: "{{ item.redis_instance_name }}"
 
-- name: Enable cluster mode for daemons
+- name: Enable SELinux cluster mode for daemons
   seboolean:
     name: daemons_enable_cluster_mode
     state: yes

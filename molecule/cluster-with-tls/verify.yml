@@ -13,4 +13,4 @@
     - name: Verify redis status
       command: "redis-cli -h {{ ansible_default_ipv4.address|default(ansible_all_ipv4_addresses[0]) }} -p {{ redis_configurations[0]['redis_tls_port'] }} --tls --cert {{ redis_configurations[0]['redis_tls_cert_file'] }} --key {{ redis_configurations[0]['redis_tls_key_file'] }} --cacert {{ redis_configurations[0]['redis_tls_ca_cert_file'] }} -a {{ redis_requirepass }} CLUSTER info"
       register: cluster_info
-      failed_when: '"cluster_state:ok" and "cluster_known_nodes:6" in cluster_info.stdout'
+      failed_when: '"cluster_state:ok" and "cluster_known_nodes:6" not in cluster_info.stdout'
