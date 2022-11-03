@@ -45,11 +45,11 @@ You can use the [ca role](https://github.com/NETWAYS/ansible-role-ca), if you wa
   * `redis_daemonize`: Run redis as adaemon and write a pid file (default: `yes`)
   * `redis_databases`: Set the number of databases (default: `16`)
   * `redis_save`: Redis Will save the DB on disk if both the given number of seconds and the given number of write operations against the DB occurred. In the example below the behavior will be to save after 900 sec (15 min) if at least 1 key changed, etcetera. The default is:
-  ```yaml redis_save:
-  - '900 1'
-  - '300 10'
-  - '60 10000'
-  ```
+    ```yaml redis_save:
+    - '900 1'
+    - '300 10'
+    - '60 10000'
+    ```
   * `redis_rdbcompression`: Compress string objects using LZF when dump .rdb databases? (default: `yes`)
   * `redis_dbfilename`: The filename where to dump the DB (default: `redis01_dump.rdb`)
   * `redis_dbdir`: The path of DB (default: `/var/lib/redis`)
@@ -64,9 +64,9 @@ You can use the [ca role](https://github.com/NETWAYS/ansible-role-ca), if you wa
   * `redis_loadmodule`: Load modules at startup. If the server is not able to load modules, it will abort. It is possible to use multiple loadmodule directives (default: `undefined`)
   * `redis_extra_config`: Set your configuration lines to the end of redis configuration file, for example:
     ```yaml redis_extra_config:
-      - repl-diskless-sync no
-      - repl-diskless-sync-delay 5
-      - repl-diskless-load disabled
+    - repl-diskless-sync no
+    - repl-diskless-sync-delay 5
+    - repl-diskless-load disabled
     ```
 ## Example Playbook ##
 
