@@ -9,7 +9,7 @@ SELinux will be managed if it is enabled.
 
 The current version is tested on rocky 8.
 
-You can use the [ca role](https://github.com/NETWAYS/ansible-role-ca), if you want to use self singed certificate.
+You can use the [ca role](https://github.com/NETWAYS/ansible-role-ca), if you want to create a local CA and use its certificates.
 
 ## Requirements ##
 
