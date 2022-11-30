@@ -1,0 +1,90 @@
+### INCLUDES ###
+{% if item.redis_includes is defined %}
+  {% for include in item.redis_includes %}
+include {{ include }}
+  {% endfor %}
+{% endif %}
+
+### MODULES ###
+{% if item.redis_loadmodule is defined %}
+  {% for loadmodule in item.redis_loadmodule %}
+loadmodule {{ loadmodule }}
+  {% endfor %}
+{% endif %}
+
+### NETWORK ###
+bind {{ item.redis_bind_addresses | default('127.0.0.1') }}
+protected-mode {{ item.redis_protected_mode | default('yes') }}
+port {{ item.redis_port | default('6379') }}
+{% if item.redis_tcp_backlog is defined %}
+tcp-backlog {{ item.redis_tcp_backlog }}
+{% endif %}
+
+
+### TLS/SSL ###
+{% if item.redis_tls_port is defined %}
+tls-port {{ item.redis_tls_port }}
+tls-cert-file {{ item.redis_tls_cert_file }}
+tls-key-file {{ item.redis_tls_key_file }}
+tls-ca-cert-file {{ item.redis_tls_ca_cert_file }}
+tls-auth-clients {{ item.redis_tls_auth_clients }}
+  {% if redis_installation_scenario == 'cluster' and item.redis_tls_cluster is defined %}
+tls-cluster {{ item.redis_tls_cluster }}
+  {% endif %}
+  {% if item.redis_tls_replication is defined %}
+tls-replication {{ item.redis_tls_replication }}
+  {% endif %}
+  {% if item.redis_tls_protocols is defined %}
+tls-protocols {{ item.redis_tls_protocols }}
+  {% endif %}
+  {% if item.redis_tls_ciphers is defined %}
+tls-ciphers {{ item.redis_tls_ciphers }}
+  {% endif %}
+{% endif %}
+
+appendonly {{ item.redis_appendonly }}
+appendfilename {{ item.redis_appendfilename }}
+
+### GENERAL ###
+pidfile {{ item.redis_pidfile }}
+logfile {{ item.redis_logfile }} 
+loglevel {{ item.redis_loglevel }}
+databases {{ item.redis_databases }}
+daemonize {{ item.redis_daemonize }}
+
+### SNAPSHOTTING  ###
+{% for save in item.redis_save %}
+save {{ save }}
+{% endfor %}
+rdbcompression {{ item.redis_rdbcompression }}
+dbfilename {{ item.redis_dbfilename }}
+dir {{ item.redis_dbdir }}
+
+### REDIS CLUSTER  ###
+{% if redis_installation_scenario == 'cluster' and item.redis_cluster_enabled is defined %}
+cluster-enabled {{ item.redis_cluster_enabled }}
+cluster-node-timeout {{ item.redis_cluster_node_timeout }}
+cluster-config-file {{ item.redis_cluster_config_file }}
+{% endif %}
+
+### SECURITY ###
+requirepass {{ redis_requirepass }}
+
+### REPLICATION ###
+{% if redis_installation_scenario == 'cluster' %}
+masterauth {{ redis_masterauth }}
+{% endif %}
+
+### MEMORY MANAGEMENT ###
+{% if item.redis_maxmemory is defined %}
+maxmemory {{ item.redis_maxmemory }}
+maxmemory-policy {{ item.redis_maxmemory_policy }}
+maxmemory-samples {{ item.redis_maxmemory_samples }}
+{% endif %}
+
+### EXTRA CONFIGURATIONS ###
+{% if item.redis_extra_config is defined %}
+{% for config in item.redis_extra_config %}
+{{ config }}
+{% endfor %}
+{% endif %}

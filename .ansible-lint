@@ -1,0 +1,6 @@
+skip_list:
+  - yaml
+  - fqcn-builtins  # Use FQCN for builtin actions.
+  - no-handler
+  - command-instead-of-shell
+  - no-jinja-when

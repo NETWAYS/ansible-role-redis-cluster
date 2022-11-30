@@ -1,0 +1,4 @@
+---
+- name: ca
+  src: https://github.com/NETWAYS/ansible-role-ca.git
+  scm: git

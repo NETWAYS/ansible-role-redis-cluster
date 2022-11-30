@@ -1,0 +1,15 @@
+[Unit]
+Description=Redis key-value database
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/redis-server {{ redis_config_directory }}/{{ item.redis_instance_name }}.conf --daemonize no --supervised systemd 
+ExecStop=/usr/libexec/redis-shutdown
+Type=notify
+User={{ redis_user_name }}
+Group={{ redis_group_name }}
+RuntimeDirectory=redis
+RuntimeDirectoryMode=0755
+LimitNOFILE=65535
+[Install]
+WantedBy=multi-user.target

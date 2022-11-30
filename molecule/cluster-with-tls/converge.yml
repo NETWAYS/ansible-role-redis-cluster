@@ -1,0 +1,87 @@
+---
+# The workaround for arbitrarily named role directory is important because the
+# git repo has one name and the role within it another
+# Found at:
+# https://github.com/ansible-community/molecule/issues/1567#issuecomment-436876722
+- name: Converge
+  hosts: all
+  vars:
+    ca_ca_host: 'redis01'
+    ca_client_ca_dir: '/etc/redis/redis_certificates'
+    ca_client_ca_dir_owner: 'redis'
+    ca_client_ca_dir_group: 'redis'
+    ca_client_ca_dir_mode: 0700
+    redis_kernel_virtual_memory: 1
+    redis_transparent_hugepages_value: 'madvise'
+    redis_installation_scenario: 'cluster'
+    redis_configurations:
+      - redis_instance_name: 'redis01'
+        redis_bind_addresses: '0.0.0.0'
+        redis_port: '0'
+        redis_appendonly: 'yes'
+        redis_appendfilename: 'appendonly_redis01.aof'
+        redis_protected_mode: 'yes'
+        redis_pidfile: '/var/run/redis/redis01.pid'
+        redis_logfile: '/var/log/redis/redis01.log'
+        redis_loglevel: 'notice'
+        redis_cluster_config_file: '/etc/redis/redis01_cluster.conf'
+        redis_cluster_enabled: 'yes'
+        redis_cluster_node_timeout: '5000'
+        redis_daemonize: 'yes'
+        redis_databases: '16'
+        redis_save:
+          - '900 1'
+          - '300 10'
+          - '60 10000'
+        redis_rdbcompression: 'yes'
+        redis_dbfilename: 'redis01_dump.rdb'
+        redis_dbdir: '/var/lib/redis'
+        redis_tls_port: '7010'
+        redis_tls_cert_file: '/etc/redis/redis_certificates/{{ ansible_fqdn }}.crt'
+        redis_tls_key_file: '/etc/redis/redis_certificates/{{ ansible_fqdn }}.key'
+        redis_tls_ca_cert_file: '/etc/redis/redis_certificates/ca.crt'
+        redis_tls_auth_clients: 'no'
+        redis_tls_cluster: 'yes'
+        redis_tls_replication: 'yes'
+
+      - redis_instance_name: 'redis02'
+        redis_bind_addresses: '0.0.0.0'
+        redis_port: '0'
+        redis_appendonly: 'yes'
+        redis_appendfilename: 'appendonly_redis02.aof'
+        redis_protected_mode: 'yes'
+        redis_pidfile: '/var/run/redis/redis02.pid'
+        redis_logfile: '/var/log/redis/redis02.log'
+        redis_loglevel: 'notice'
+        redis_cluster_config_file: '/etc/redis/redis02_cluster.conf'
+        redis_cluster_enabled: 'yes'
+        redis_cluster_node_timeout: '5000'
+        redis_daemonize: 'yes'
+        redis_databases: 16
+        redis_save:
+          - '900 1'
+          - '300 10'
+          - '60 10000'
+        redis_rdbcompression: 'yes'
+        redis_dbfilename: 'redis02_dump.rdb'
+        redis_dbdir: '/var/lib/redis'
+        redis_tls_port: '7011'
+        redis_tls_cert_file: '/etc/redis/redis_certificates/{{ ansible_fqdn }}.crt'
+        redis_tls_key_file: '/etc/redis/redis_certificates/{{ ansible_fqdn }}.key'
+        redis_tls_ca_cert_file: '/etc/redis/redis_certificates/ca.crt'
+        redis_tls_auth_clients: 'no'
+        redis_tls_cluster: 'yes'
+        redis_tls_replication: 'yes'
+  tasks:
+    - name: "Install redis to get redis user for CA role"
+      include_role:
+        name: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') | basename }}"
+        tasks_from: install.yml
+
+    - name: "Include CA role"
+      include_role:
+        name: ca
+
+    - name: "Include redis-cluster role"
+      include_role:
+        name: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') | basename }}"

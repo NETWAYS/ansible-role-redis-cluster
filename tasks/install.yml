@@ -1,0 +1,52 @@
+---
+
+- name: Set up overcommit
+  sysctl:
+    name: vm.overcommit_memory
+    value: "{{ redis_kernel_virtual_memory }}"
+    state: present
+    reload: yes
+  when: redis_kernel_virtual_memory is defined
+
+- name: Get transparent hugepages value
+  shell: cat /sys/kernel/mm/transparent_hugepage/enabled
+  register: transparent_hugepages_result
+  changed_when: false
+  when: redis_transparent_hugepages_value is defined
+
+- name: Disable/enable transparent hugepages for current session
+  shell: "echo {{ redis_transparent_hugepages_value }} > /sys/kernel/mm/transparent_hugepage/enabled"
+  when: "'[{{ redis_transparent_hugepages_value }}]' not in transparent_hugepages_result.stdout and redis_transparent_hugepages_value is defined"
+
+- name: Disable/enable transparent hugepages after reboot
+  blockinfile:
+    path: /etc/rc.local
+    mode: '0777'
+    owner: root
+    group: root
+    block: |
+      if test -f /sys/kernel/mm/transparent_hugepage/enabled; then
+        echo {{ redis_transparent_hugepages_value }} > /sys/kernel/mm/transparent_hugepage/enabled
+      fi
+  register: thp_result
+  when: redis_transparent_hugepages_value is defined
+
+- name: Change permission on /etc/rc.d/rc.local
+  file:
+    path: /etc/rc.d/rc.local
+    owner: root
+    group: root
+    mode: '0777'
+  when: thp_result.changed
+
+- name: Enable redis module
+  command: "dnf -y module enable redis:{{ redis_version }}"
+  changed_when: false
+  when:
+    - ansible_os_family == "RedHat"
+    - ansible_distribution_major_version == "8"
+    - redis_manage_dnf_module
+
+- name: Install redis
+  package:
+    name: redis
