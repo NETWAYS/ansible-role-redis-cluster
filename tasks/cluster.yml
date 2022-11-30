@@ -14,7 +14,17 @@
           {{ redis_instances.append( host_ip+ ':' +host_port ) }}
         {%- endfor -%}
       {%- endfor -%}
-      redis-cli --cluster create {{ redis_instances | join(' ') }} --cluster-replicas {{ redis_masters_replicas }} -a {{ redis_requirepass }} --cluster-yes {% if redis_configurations[0]['redis_tls_cluster'] is defined and redis_configurations[0]['redis_tls_cluster'] == 'yes' %} --tls --cert {{ redis_configurations [0]['redis_tls_cert_file'] }} --key {{ redis_configurations [0]['redis_tls_key_file'] }} --cacert {{ redis_configurations [0]['redis_tls_ca_cert_file'] }} {% endif %}
+      redis-cli --cluster create
+      {{ redis_instances | join(' ') }}
+      --cluster-replicas {{ redis_masters_replicas }}
+      -a {{ redis_requirepass }}
+      --cluster-yes
+      {% if redis_configurations[0]['redis_tls_cluster'] is defined
+          and redis_configurations[0]['redis_tls_cluster'] == 'yes' %}
+        --tls --cert {{ redis_configurations [0]['redis_tls_cert_file'] }}
+        --key {{ redis_configurations [0]['redis_tls_key_file'] }}
+        --cacert {{ redis_configurations [0]['redis_tls_ca_cert_file'] }}
+      {% endif %}
   tags: redis_cluster
 
 - name: print redis command
