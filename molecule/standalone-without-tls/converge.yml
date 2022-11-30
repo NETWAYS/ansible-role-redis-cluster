@@ -6,8 +6,8 @@
 - name: Converge
   hosts: all
   vars:
-   kernel_virtual_memory: 1
-   transparent_hugepages_value: 'madvise'
+   redis_kernel_virtual_memory: 1
+   redis_transparent_hugepages_value: 'madvise'
   tasks:
     - name: "Include redis_cluster role"
       include_role:

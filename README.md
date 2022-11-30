@@ -17,10 +17,10 @@ You can use the [ca role](https://github.com/NETWAYS/ansible-role-ca), if you wa
 
 ## Variables ##
 
-* `manage_dnf_module`: Should the corresponding dnf module enabled? (default: `true`)
+* `redis_manage_dnf_module`: Should the corresponding dnf module enabled? (default: `true`)
 * `redis_version`: Redis version to be installed (default: `6`)
-* `kernel_virtual_memory`: If you want to disable the kernel virtual memory, set the value to 1 (default: `undefined, the system default will be used`)
-* `transparent_hugepages_value`: Manage THP, availible values are `always`, `madvise` or `never` (default: `undefined, the system default will be used`)
+* `redis_kernel_virtual_memory`: If you want to disable the kernel virtual memory, set the value to 1 (default: `undefined, the system default will be used`)
+* `redis_transparent_hugepages_value`: Manage THP, availible values are `always`, `madvise` or `never` (default: `undefined, the system default will be used`)
 * `redis_systemd_directory`: Directory for redis systemd service (default: `/usr/lib/systemd/system`)
 * `redis_config_directory`: Directory for redis configuration file (default: `/etc/redis`)
 * `redis_user_name`: User as runner of redis service and owner of redis files\directories (default: `redis`)
