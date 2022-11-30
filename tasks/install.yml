@@ -15,8 +15,8 @@
   when: redis_transparent_hugepages_value is defined
 
 - name: Disable/enable transparent hugepages for current session
-  shell: "echo {{ transparent_hugepages_value }} > /sys/kernel/mm/transparent_hugepage/enabled"
-  when: "'[{{ transparent_hugepages_value }}]' not in transparent_hugepages_result.stdout and redis_transparent_hugepages_value is defined"
+  shell: "echo {{ redis_transparent_hugepages_value }} > /sys/kernel/mm/transparent_hugepage/enabled"
+  when: "'[{{ redis_transparent_hugepages_value }}]' not in transparent_hugepages_result.stdout and redis_transparent_hugepages_value is defined"
 
 - name: Disable/enable transparent hugepages after reboot
   blockinfile:
@@ -26,7 +26,7 @@
     group: root
     block: |
       if test -f /sys/kernel/mm/transparent_hugepage/enabled; then
-        echo {{ transparent_hugepages_value }} > /sys/kernel/mm/transparent_hugepage/enabled
+        echo {{ redis_transparent_hugepages_value }} > /sys/kernel/mm/transparent_hugepage/enabled
       fi
   register: thp_result
   when: redis_transparent_hugepages_value is defined
