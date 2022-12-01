@@ -1,0 +1,19 @@
+---
+galaxy_info:
+  role_name: redis_cluster
+  author: Afeef Ghannam <afeef.ghannam@netways.de>
+  namespace: netways
+  description: Redis cluster for Linux
+  company: "Netways GmbH"
+  license: license (GPL-3.0-or-later)
+  min_ansible_version: 2.4
+  platforms:
+    - name: EL
+      version:
+        - 8
+  galaxy_tags:
+    - redis
+    - database
+    - cluster
+    - system
+dependencies: []
