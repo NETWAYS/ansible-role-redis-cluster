@@ -3,7 +3,7 @@ Description=Redis key-value database
 After=network.target
 
 [Service]
-ExecStart=/usr/bin/redis-server {{ redis_config_directory }}/{{ item.redis_instance_name }}.conf --daemonize no --supervised systemd 
+ExecStart=/usr/bin/redis-server {{ redis_config_directory }}/{{ item.redis_instance_name }}.conf --daemonize {{ item.redis_daemonize }} --supervised {{ item.redis_supervised }} 
 ExecStop=/usr/libexec/redis-shutdown
 Type=notify
 User={{ redis_user_name }}
