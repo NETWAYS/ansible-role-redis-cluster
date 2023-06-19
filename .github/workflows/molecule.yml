@@ -9,7 +9,28 @@ on:
   pull_request:
 
 jobs:
-  build:
+  lint_full:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the codebase.
+        uses: actions/checkout@v3
+
+      - name: Set up Python 3.
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install test dependencies.
+        run: |
+          python3 -m pip install --upgrade pip
+          python3 -m pip install -r requirements-test.txt
+
+      - name: Lint code.
+        run: |
+          yamllint .
+          ansible-lint
+
+  redis_cluster:
     runs-on: ubuntu-latest
 
     strategy:
