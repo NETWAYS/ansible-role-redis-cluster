@@ -1,4 +1,5 @@
 ansible
 ansible-lint
 molecule
-molecule-docker>2.0.0
+molecule-plugins[docker]
+pytest

@@ -1,15 +1,15 @@
 ### INCLUDES ###
 {% if item.redis_includes is defined %}
-  {% for include in item.redis_includes %}
+{% for include in item.redis_includes %}
 include {{ include }}
-  {% endfor %}
+{% endfor %}
 {% endif %}
 
 ### MODULES ###
 {% if item.redis_loadmodule is defined %}
-  {% for loadmodule in item.redis_loadmodule %}
+{% for loadmodule in item.redis_loadmodule %}
 loadmodule {{ loadmodule }}
-  {% endfor %}
+{% endfor %}
 {% endif %}
 
 ### NETWORK ###
@@ -20,7 +20,6 @@ port {{ item.redis_port | default('6379') }}
 tcp-backlog {{ item.redis_tcp_backlog }}
 {% endif %}
 
-
 ### TLS/SSL ###
 {% if item.redis_tls_port is defined %}
 tls-port {{ item.redis_tls_port }}
@@ -28,18 +27,18 @@ tls-cert-file {{ item.redis_tls_cert_file }}
 tls-key-file {{ item.redis_tls_key_file }}
 tls-ca-cert-file {{ item.redis_tls_ca_cert_file }}
 tls-auth-clients {{ item.redis_tls_auth_clients }}
-  {% if redis_installation_scenario == 'cluster' and item.redis_tls_cluster is defined %}
+{% if redis_installation_scenario == 'cluster' and item.redis_tls_cluster is defined %}
 tls-cluster {{ item.redis_tls_cluster }}
-  {% endif %}
-  {% if item.redis_tls_replication is defined %}
+{% endif %}
+{% if item.redis_tls_replication is defined %}
 tls-replication {{ item.redis_tls_replication }}
-  {% endif %}
-  {% if item.redis_tls_protocols is defined %}
+{% endif %}
+{% if item.redis_tls_protocols is defined %}
 tls-protocols {{ item.redis_tls_protocols }}
-  {% endif %}
-  {% if item.redis_tls_ciphers is defined %}
+{% endif %}
+{% if item.redis_tls_ciphers is defined %}
 tls-ciphers {{ item.redis_tls_ciphers }}
-  {% endif %}
+{% endif %}
 {% endif %}
 
 appendonly {{ item.redis_appendonly }}
@@ -47,7 +46,7 @@ appendfilename {{ item.redis_appendfilename }}
 
 ### GENERAL ###
 pidfile {{ item.redis_pidfile }}
-logfile {{ item.redis_logfile }} 
+logfile {{ item.redis_logfile }}
 loglevel {{ item.redis_loglevel }}
 databases {{ item.redis_databases }}
 daemonize {{ item.redis_daemonize }}
