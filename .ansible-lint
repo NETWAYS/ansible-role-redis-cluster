@@ -4,3 +4,5 @@ skip_list:
   - no-handler
   - command-instead-of-shell
   - no-jinja-when
+  - 'role-name'
+  - '301' # Commands should not change things if nothing needs doing
