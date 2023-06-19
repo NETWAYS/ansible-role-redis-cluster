@@ -19,7 +19,7 @@
        redis_pidfile: '/var/run/redis/redis01.pid'
        redis_logfile: '/var/log/redis/redis01.log'
        redis_loglevel: 'notice'
-       redis_daemonize: 'yes'
+       redis_daemonize: 'no'
        redis_databases: '16'
        redis_save:
          - '900 1'
@@ -31,6 +31,7 @@
        redis_cluster_config_file: '/etc/redis/redis01_cluster.conf'
        redis_cluster_enabled: 'yes'
        redis_cluster_node_timeout: '5000'
+       redis_supervised: 'systemd'
 
      - redis_instance_name: 'redis02'
        redis_bind_addresses: '0.0.0.0'
@@ -53,6 +54,7 @@
        redis_cluster_config_file: '/etc/redis/redis02_cluster.conf'
        redis_cluster_node_timeout: '5000'
        redis_cluster_enabled: 'yes'
+       redis_supervised: 'systemd'
   tasks:
     - name: "Include redis_cluster role"
       include_role:
