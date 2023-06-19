@@ -1,8 +1,8 @@
 skip_list:
   - yaml
-  - fqcn-builtins  # Use FQCN for builtin actions.
-  - no-handler
-  - command-instead-of-shell
-  - no-jinja-when
-  - 'role-name'
+  - 'fqcn[action]'
+  - 'no-handler'
+  - 'command-instead-of-shell'
+  - 'no-jinja-when'
+  - 'name[casing]'
   - '301' # Commands should not change things if nothing needs doing
