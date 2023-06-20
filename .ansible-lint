@@ -1,8 +1,9 @@
 warn_list:
   - 'no-handler'
   - 'command-instead-of-shell'
-  - 'no-jinja-when'
   - 'name[casing]'
+  - 'jinja[spacing]'
+  - 'no-jinja-when'
 
 skip_list:
   - yaml
