@@ -43,6 +43,7 @@
         redis_tls_auth_clients: 'no'
         redis_tls_cluster: 'yes'
         redis_tls_replication: 'yes'
+        redis_supervised: 'systemd'
 
       - redis_instance_name: 'redis02'
         redis_bind_addresses: '0.0.0.0'
@@ -72,6 +73,7 @@
         redis_tls_auth_clients: 'no'
         redis_tls_cluster: 'yes'
         redis_tls_replication: 'yes'
+        redis_supervised: 'systemd'
   tasks:
     - name: "Install redis to get redis user for CA role"
       include_role:
