@@ -1,9 +1,11 @@
-skip_list:
-  - yaml
-  - 'fqcn[action-core]'
-  - 'fqcn[action]'
+warn_list:
   - 'no-handler'
   - 'command-instead-of-shell'
   - 'no-jinja-when'
   - 'name[casing]'
+
+skip_list:
+  - yaml
+  - 'fqcn[action-core]'
+  - 'fqcn[action]'
   - '301' # Commands should not change things if nothing needs doing
