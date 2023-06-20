@@ -1,6 +1,12 @@
+warn_list:
+  - 'no-handler'
+  - 'command-instead-of-shell'
+  - 'name[casing]'
+  - 'jinja[spacing]'
+  - 'no-jinja-when'
+
 skip_list:
   - yaml
-  - fqcn-builtins  # Use FQCN for builtin actions.
-  - no-handler
-  - command-instead-of-shell
-  - no-jinja-when
+  - 'fqcn[action-core]'
+  - 'fqcn[action]'
+  - '301' # Commands should not change things if nothing needs doing
