@@ -1,6 +1,5 @@
 # ansible-role-redis-cluster
 
-**Under Testing nearly done to be used in production**
 
 [![CI](https://github.com/netways/ansible-role-redis-cluster/workflows/Molecule%20Test/badge.svg?event=push)](https://github.com/netways/ansible-role-redis-cluster/workflows/Molecule%20Test/badge.svg)
 
