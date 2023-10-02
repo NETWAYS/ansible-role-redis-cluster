@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out the codebase.
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Python 3.
         uses: actions/setup-python@v4
@@ -40,7 +40,7 @@ jobs:
         scenario: [standalone-without-tls, standalone-with-tls, cluster-without-tls, cluster-with-tls]
     steps:
       - name: Check out code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Python 3.8
         uses: actions/setup-python@v4
