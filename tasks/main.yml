@@ -24,14 +24,16 @@
     redis_ports: >-
       {%- set redis_ports = [] -%}
       {%- for i in redis_configurations -%}
-        {%- if i['redis_tls_port'] is defined -%}
-          {%- set redis_port = i['redis_tls_port'] -%}
-        {%- else -%}
-          {%- set redis_port = i['redis_port'] -%}
+        {%- if i['redis_port'] is defined -%}
+          {%- set port = i['redis_port'] -%}
+          {{ redis_ports.append(port) }}
         {%- endif -%}
-        {{ redis_ports.append(redis_port) }}
-        {%- if redis_installation_scenario == 'cluster' -%}
-          {{ redis_ports.append(redis_port |int + 10000) }}
+        {%- if i['redis_tls_port'] is defined -%}
+          {%- set port = i['redis_tls_port'] -%}
+          {{ redis_ports.append(port) }}
+          {%- if redis_installation_scenario == 'cluster' -%}
+            {{ redis_ports.append(port|int + 10000) }}
+          {%- endif -%}
         {%- endif -%}
       {%- endfor -%}
       {{ redis_ports | join(',') }}
