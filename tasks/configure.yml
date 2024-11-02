@@ -1,5 +1,5 @@
 ---
-- name: "Set redis service for {{ item.redis_instance_name }}"
+- name: "Set redis service"
   template:
     src: redis.service.j2
     dest: "{{ redis_systemd_directory }}/{{ item.redis_instance_name }}.service"
@@ -7,13 +7,15 @@
     owner: root
     group: root
   when: "ansible_service_mgr == 'systemd'"
-  notify:
-    - Daemon reload
+  loop: "{{ redis_configurations | default([]) }}"
+  loop_control:
+    label: "{{ item.redis_instance_name }}"
+  notify: Daemon reload
 
 - name: Flush handlers
   meta: flush_handlers
 
-- name: "Create redis config directory for {{ item.redis_instance_name }}"
+- name: "Create redis config directory"
   file:
     path: "{{ redis_config_directory }}"
     state: directory
@@ -23,11 +25,7 @@
     setype: redis_conf_t
   when: redis_config_directory != "/etc"
 
-- name: "Set service name {{ item.redis_instance_name }}"
-  set_fact:
-    service_name: "{{ item.redis_instance_name }}.service"
-
-- name: "Set redis config for {{ item.redis_instance_name }}"
+- name: "Set redis config"
   template:
     src: redis.conf.j2
     dest: "{{ redis_config_directory }}/{{ item.redis_instance_name }}.conf"
@@ -35,13 +33,25 @@
     group: "{{ redis_group_name }}"
     mode: '0660'
     setype: redis_conf_t
-  notify: Restart redis
+  register: redis_config
+  loop: "{{ redis_configurations | default([]) }}"
+  loop_control:
+    label: "{{ item.redis_instance_name }}"
 
-- name: "Start redis service {{ item.redis_instance_name }}"
+- name: "Restart redis service(s) if config changed"
+  systemd:
+    state: restarted
+    name: "{{ item.redis_instance_name }}"
+  when: redis_config.changed
+  loop: "{{ redis_configurations | default([]) }}"
+  loop_control:
+    label: "{{ item.redis_instance_name }}"
+
+- name: "Start and enable redis service(s)"
   systemd:
     state: started
-    name: "{{ service_name }}"
+    name: "{{ item.redis_instance_name }}"
     enabled: yes
-
-- name: Flush handlers
-  meta: flush_handlers
+  loop: "{{ redis_configurations | default([]) }}"
+  loop_control:
+    label: "{{ item.redis_instance_name }}"
