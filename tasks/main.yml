@@ -77,7 +77,6 @@
     apply:
       tags: redis_configuration
   tags: redis_configuration
-  loop: "{{ redis_configurations | default([]) }}"
 
 - name: Build a cluster
   import_tasks: cluster.yml

@@ -3,8 +3,3 @@
 - name: Daemon reload
   systemd:
     daemon_reload: yes
-
-- name: Restart redis
-  systemd:
-    state: restarted
-    name: "{{ service_name }}"

@@ -1,4 +1,5 @@
 ---
+
 - name: Set redis cluster command
   set_fact:
     redis_cluster_command: >-
