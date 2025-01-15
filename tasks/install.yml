@@ -16,7 +16,9 @@
 
 - name: Disable/enable transparent hugepages for current session
   shell: "echo {{ redis_transparent_hugepages_value }} > /sys/kernel/mm/transparent_hugepage/enabled"
-  when: "'[{{ redis_transparent_hugepages_value }}]' not in transparent_hugepages_result.stdout and redis_transparent_hugepages_value is defined"
+  when:
+    - redis_transparent_hugepages_value is defined
+    - "'[{{ redis_transparent_hugepages_value }}]' not in transparent_hugepages_result.stdout"
 
 - name: Disable/enable transparent hugepages after reboot
   blockinfile:
